@@ -80,9 +80,8 @@ function getPageLocation(event) {
       const gclidParts = gclidCookie.split(".");
       const gclid = gclidParts[gclidParts.length - 1];
 
-      pageLocation = pageLocation.includes("?")
-        ? `${pageLocation}&gclid=${gclid}`
-        : `${pageLocation}?gclid=${gclid}`;
+    pageLocation = pageLocation.indexOf("?") !== -1 ? pageLocation + "&gclid=" + gclid : pageLocation + "?gclid=" + gclid;
+
     }
   }
   return pageLocation;
@@ -145,14 +144,8 @@ async function ecommerceDataLayer(gtm_event_name, event) {
         .map((discount) => discount.title)
         .join(","),
       items: (event.data?.checkout?.lineItems || []).map((item) => ({
-        item_id: formattedItemId
-          ? "shopify_" +
-            storeCountryCode +
-            "_" +
-            (item.variant?.product?.id || "") +
-            "_" +
-            (item.variant?.id || "")
-          : item.variant?.product?.id,
+item_id: formattedItemId ? "shopify_" + storeCountryCode + "_" + (item.variant?.product?.id || "") + "_" + (item.variant?.id || "") : item.variant?.product?.id,
+
         product_id: item.variant?.product?.id,
         variant_id: item.variant?.id,
         sku: item.variant?.sku,
